@@ -1,0 +1,64 @@
+<div class="bgimg">
+  <div id="particles-js"></div>
+  <div class="caption">
+    <span class="border">SEARCH ENGINEE</span>
+  </div>
+</div>
+<div class="search-div">
+  <h3 style="text-align:center; color:green">Search Here</h3>
+  <div class="year-select">
+    <div class="year-range">Year Range For Search</div>
+    <select id="sel1" [(ngModel)]="start">
+      <option *ngFor="let year of years">{{year}}</option>
+    </select>
+    <select id="sel2" [(ngModel)]="end">
+      <option *ngFor="let year of years">{{year}}</option>
+    </select>
+  </div>
+  <div class="year-select">
+    <div style="width:70vw">
+      <p-autoComplete [(ngModel)]="suggestion" [suggestions]="suggestionResults" [style]="{'width':'98%'}" [inputStyle]="{'width':'100%'}"
+        (completeMethod)="searchCustomers($event)" (onSelect)="getSelected($event)" (keyup.enter)="getSelected(suggestion)">
+        <ng-template let-suggestion pTemplate="item">
+          {{suggestion}}
+        </ng-template>
+        <ng-template let-suggestion pTemplate="selectedItem">
+          {{suggestion}}
+        </ng-template>
+      </p-autoComplete>
+    </div>
+    <button label="Search" pButton type="button" class="ui-button-raised ui-button-rounded" (click)="getSelected(suggestion)"></button>
+  </div>
+</div>
+<div class="loading" *ngIf="showSpinner">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+<div class="box" *ngIf="fullData?.length;else norecord">
+  <div class="page-buttons">
+    <button label="Previous Page" *ngIf="isPrev" pButton type="button" class="ui-button-raised ui-button-rounded" (click)="pagePrev()"></button>
+    <button label="Next Page" *ngIf="isNext" pButton type="button" class="ui-button-raised ui-button-rounded" (click)="pageNext()"></button>
+  </div>
+  <div class="row">
+    <div class="col-sm-4" *ngFor="let image of fullData">
+      <div class="card h-50">
+        <a [href]="image?.links[0]?.href" data-lightbox="mygallery" data-title={{image?.data[0]?.description}}>
+          <img class="card-img-top img-fluid" [src]="image?.links[0]?.href" alt="img">
+        </a>
+        <div class="card-block" style="background:black; color:white">
+          <h4 class="card-title">{{image?.data[0]?.title}}</h4>
+          <p class="card-text">{{image?.data[0]?.date_created}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #norecord>
+  <div class="no-record">
+    No record to display
+  </div>
+</ng-template>
+
+<div class="footer">
+  Courtesy: NASA Images
+</div>
